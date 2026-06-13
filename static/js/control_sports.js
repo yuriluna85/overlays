@@ -18,7 +18,9 @@ const CAMPUSES = [
 ];
 
 // Global Sports Variables
-const SERVER_URL = window.location.hostname === 'yuriluna85.github.io' ? 'http://127.0.0.1:8000' : '';
+const urlParams = new URLSearchParams(window.location.search);
+const serverIP = urlParams.get('ip') || localStorage.getItem('server_ip') || '127.0.0.1';
+const SERVER_URL = window.location.hostname === 'yuriluna85.github.io' ? `http://${serverIP}:8000` : '';
 let currentSport = 'futsal';
 let timerDirection = 'down';
 let localKicksA = [];
@@ -94,14 +96,41 @@ function connectSportsEventSource() {
   const statusLabel = document.getElementById('status-label');
   const statusDot = document.querySelector('.status-dot');
 
+  // Add configuration link if on GitHub Pages
+  if (window.location.hostname === 'yuriluna85.github.io' && statusLabel) {
+    if (!document.getElementById('btn-config-ip')) {
+      const configLink = document.createElement('a');
+      configLink.id = 'btn-config-ip';
+      configLink.href = '#';
+      configLink.style.color = '#3b82f6';
+      configLink.style.textDecoration = 'underline';
+      configLink.style.marginLeft = '8px';
+      configLink.style.fontSize = '11px';
+      configLink.innerHTML = '<i class="fa-solid fa-gear"></i> Configurar IP';
+      configLink.onclick = (e) => {
+        e.preventDefault();
+        const currentIP = localStorage.getItem('server_ip') || '127.0.0.1';
+        const newIP = prompt("Digite o endereço IP do computador onde o servidor Flask está rodando:", currentIP);
+        if (newIP !== null) {
+          const cleanIP = newIP.trim();
+          if (cleanIP) {
+            localStorage.setItem('server_ip', cleanIP);
+            window.location.reload();
+          }
+        }
+      };
+      statusLabel.parentNode.appendChild(configLink);
+    }
+  }
+
   source.onopen = () => {
-    statusLabel.textContent = "Servidor Conectado";
-    statusDot.className = "status-dot online";
+    if (statusLabel) statusLabel.textContent = "Servidor Conectado";
+    if (statusDot) statusDot.className = "status-dot online";
   };
 
   source.onerror = () => {
-    statusLabel.textContent = "Desconectado. Reconectando...";
-    statusDot.className = "status-dot offline";
+    if (statusLabel) statusLabel.textContent = "Desconectado. Reconectando...";
+    if (statusDot) statusDot.className = "status-dot offline";
   };
 
   source.onmessage = (event) => {

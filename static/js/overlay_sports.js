@@ -1,5 +1,7 @@
 // Local variables to track previous scores for animations
-const SERVER_URL = window.location.hostname === 'yuriluna85.github.io' ? 'http://127.0.0.1:8000' : '';
+const urlParams = new URLSearchParams(window.location.search);
+const serverIP = urlParams.get('ip') || localStorage.getItem('server_ip') || '127.0.0.1';
+const SERVER_URL = window.location.hostname === 'yuriluna85.github.io' ? `http://${serverIP}:8000` : '';
 let prevScoreA = 0;
 let prevScoreB = 0;
 
