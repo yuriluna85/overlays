@@ -1,0 +1,362 @@
+:root {
+  --font-body: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  
+  --color-green: #009639;
+  --color-red: #e4002b;
+  --color-dark: #1e1e24;
+  --color-bg-opaque: rgba(18, 18, 22, 0.9);
+  
+  --border-radius-sm: 6px;
+  --border-radius-md: 10px;
+  --border-radius-lg: 16px;
+  
+  --shadow-overlay: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --border-overlay: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: transparent; /* Transparent for OBS Browser Source */
+  color: #fff;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: relative;
+}
+
+.canvas-container {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+}
+
+/* ==========================================================================
+   LOWER THIRD (IDENTIFIER BANNER)
+   ========================================================================== */
+.lower-third-overlay {
+  position: absolute;
+  bottom: 80px;
+  left: 80px;
+  display: flex;
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  min-width: 450px;
+  max-width: 700px;
+  overflow: hidden;
+  
+  /* Initial State (Hidden) */
+  transform: translateX(-150%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.lower-third-overlay.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.lower-third-overlay .accent-bar {
+  width: 8px;
+  background-color: var(--color-green); /* Dynamically changed by theme */
+  flex-shrink: 0;
+}
+
+/* Styles */
+.lower-third-overlay.theme-green .accent-bar { background-color: var(--color-green); }
+.lower-third-overlay.theme-red .accent-bar { background-color: var(--color-red); }
+.lower-third-overlay.theme-dark .accent-bar { background-color: #55555d; }
+
+.lower-third-content {
+  padding: 18px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.lower-third-content h3 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.lower-third-content p {
+  font-size: 14px;
+  color: #e1e1e6;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   HEADER BAR / TITLE OVERLAY (TOP LEFT)
+   ========================================================================== */
+.header-overlay {
+  position: absolute;
+  top: 40px;
+  left: 80px;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  padding: 12px 24px;
+  gap: 20px;
+  
+  /* Initial State (Hidden) */
+  transform: translateY(-150%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.header-overlay.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+  padding-right: 20px;
+  height: 40px;
+}
+
+.bar-tag {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.title-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title-details h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.title-details p {
+  font-size: 12px;
+  color: #c4c4cc;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ==========================================================================
+   SPONSORS ROTATING CAROUSEL (TOP RIGHT)
+   ========================================================================== */
+.sponsors-overlay {
+  position: absolute;
+  top: 40px;
+  right: 80px;
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  width: 180px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  /* Initial State (Hidden) */
+  transform: translateY(-150%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.sponsors-overlay.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.sponsors-header {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8d8d99;
+  text-align: center;
+}
+
+.sponsor-logo-container {
+  flex: 1;
+  background-color: #fff; /* White background for logos */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.sponsor-logo-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.sponsor-logo-container img.fade-out {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   COUNTDOWN TIMER OVERLAY (CENTER SCREEN)
+   ========================================================================== */
+.timer-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background-color: rgba(10, 10, 12, 0.95);
+  border: 1px solid rgba(0, 150, 57, 0.15);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  padding: 36px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  
+  /* Initial State (Hidden) */
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+}
+
+.timer-overlay.show {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.timer-tag {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: #c4c4cc;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer-tag i {
+  color: var(--color-green);
+  animation: pulse-beacon 1.5s infinite;
+}
+
+@keyframes pulse-beacon {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.timer-clock {
+  font-family: var(--font-display);
+  font-size: 110px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(0, 150, 57, 0.3);
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   ALERT BOARD (CENTER BOTTOM OR MAIN SCREEN)
+   ========================================================================== */
+.alert-overlay {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: auto;
+  max-width: 900px;
+  min-width: 500px;
+  
+  /* Initial State (Hidden) */
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.alert-overlay.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.alert-icon-wrapper {
+  background-color: rgba(0, 150, 57, 0.1);
+  border: 1px solid rgba(0, 150, 57, 0.2);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.alert-icon-wrapper i {
+  font-size: 20px;
+  color: var(--color-green);
+}
+
+.alert-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert-text-wrapper h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-green);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.alert-text-wrapper p {
+  font-size: 18px;
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.5;
+}

@@ -1,0 +1,429 @@
+:root {
+  --font-body: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  
+  --color-green: #009639;
+  --color-red: #e4002b;
+  --color-bg-opaque: rgba(18, 18, 22, 0.92);
+  --border-overlay: 1px solid rgba(255, 255, 255, 0.08);
+  --shadow-overlay: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  --border-radius-md: 10px;
+  --transition-fast: all 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: transparent;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: relative;
+}
+
+.canvas-container {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+}
+
+/* ==========================================================================
+   SPORTS SCOREBOARD OVERLAY (TOP LEFT)
+   ========================================================================== */
+.scoreboard-wrapper {
+  position: absolute;
+  top: 40px;
+  left: 80px;
+  width: 540px;
+  display: flex;
+  flex-direction: column;
+  
+  /* Initial State (Hidden) */
+  transform: translateY(-150%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+}
+
+.scoreboard-wrapper.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.scoreboard-overlay {
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-overlay);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header bar */
+.scoreboard-header {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.if-mini-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-comp-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.scoreboard-period {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: #c4c4cc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Main scores row */
+.scoreboard-main-row {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.team-block {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.team-block.team-a {
+  justify-content: flex-start;
+}
+
+.team-block.team-b {
+  justify-content: flex-end;
+}
+
+.team-badge {
+  width: 8px;
+  height: 28px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+/* Badge colors */
+.team-badge.color-green { background-color: var(--color-green); }
+.team-badge.color-red { background-color: var(--color-red); }
+.team-badge.color-blue { background-color: #002f6c; }
+.team-badge.color-yellow { background-color: #ffcd00; }
+.team-badge.color-white { background-color: #ffffff; }
+.team-badge.color-dark { background-color: #121214; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+.team-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-box {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+/* Pop animation for points/goals updates */
+@keyframes score-pop {
+  0% { transform: scale(1); color: #fff; background-color: rgba(0, 0, 0, 0.4); }
+  50% { transform: scale(1.25); color: #10b981; background-color: rgba(16, 185, 129, 0.15); box-shadow: 0 0 15px rgba(16, 185, 129, 0.2); }
+  100% { transform: scale(1); color: #fff; background-color: rgba(0, 0, 0, 0.4); }
+}
+
+.score-box.pop {
+  animation: score-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Timer divider block */
+.timer-box {
+  width: 100px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-box span {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+/* Scoreboard footer (Fouls / Sets) */
+.scoreboard-footer {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 6px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-stats-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.stat-item {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8d8d99;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-item span {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.stat-divider {
+  color: rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   SUBTLE SPORTS ALERT BANNER (SLIDES DOWN FROM SCOREBOARD)
+   ========================================================================== */
+.scoreboard-alert-banner {
+  width: calc(100% - 20px);
+  margin: 0 auto;
+  height: 38px;
+  background: linear-gradient(90deg, var(--color-red) 0%, rgba(228, 0, 43, 0.85) 100%);
+  border: var(--border-overlay);
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 1;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  
+  /* Hidden state behind/under scoreboard */
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.scoreboard-alert-banner.show {
+  transform: translateY(-1px);
+  opacity: 1;
+}
+
+/* Color overrides */
+.scoreboard-alert-banner.alert-green {
+  background: linear-gradient(90deg, var(--color-green) 0%, rgba(0, 150, 57, 0.85) 100%);
+}
+
+.scoreboard-alert-banner.alert-yellow {
+  background: linear-gradient(90deg, #e3a008 0%, rgba(227, 160, 8, 0.85) 100%);
+}
+
+/* Bouncing ball icon */
+.alert-ball {
+  font-size: 20px;
+  display: inline-block;
+}
+
+.scoreboard-alert-banner.show .alert-ball {
+  animation: ball-drop-bounce 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes ball-drop-bounce {
+  0% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+  35% { transform: translateY(0) rotate(120deg); opacity: 1; }
+  55% { transform: translateY(-12px) rotate(240deg); }
+  70% { transform: translateY(0) rotate(360deg); }
+  85% { transform: translateY(-5px) rotate(420deg); }
+  100% { transform: translateY(0) rotate(480deg); }
+}
+
+/* Glowing text */
+.alert-text-content {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.scoreboard-alert-banner.show .alert-text-content {
+  animation: text-pulse-glow 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes text-pulse-glow {
+  0% { transform: scale(0.96); text-shadow: 0 0 4px rgba(255,255,255,0.4); }
+  100% { transform: scale(1.04); text-shadow: 0 0 12px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.3); }
+}
+
+/* ==========================================================================
+   PENALTIES OVERLAY ROW
+   ========================================================================== */
+.scoreboard-penalties-row {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlay-penalty-dots {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+#render-penalties-a {
+  justify-content: flex-start;
+}
+
+#render-penalties-b {
+  justify-content: flex-end;
+}
+
+.penalty-middle-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  color: #8d8d99;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 12px;
+}
+
+.overlay-penalty-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.overlay-penalty-dot.pending {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.overlay-penalty-dot.success {
+  background-color: var(--color-green);
+  border-color: var(--color-green);
+  box-shadow: 0 0 8px var(--color-green);
+}
+
+.overlay-penalty-dot.miss {
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  box-shadow: 0 0 8px var(--color-red);
+}
+
+/* ==========================================================================
+   REPLAY WATERMARK BADGE (BOTTOM LEFT - LARGER)
+   ========================================================================== */
+.replay-badge-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 80px;
+  background-color: var(--color-bg-opaque);
+  backdrop-filter: blur(12px);
+  border: var(--border-overlay);
+  border-radius: var(--border-radius-md);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow-overlay);
+  
+  /* Hidden state (offscreen left) */
+  transform: translateX(-180%);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  z-index: 10;
+}
+
+.replay-badge-overlay.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.replay-record-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-red);
+  animation: pulse-dot 1s infinite alternate;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px var(--color-red); }
+}
+
+.replay-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3px;
+}

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Controle de Overlays — IF Baiano</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/control.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-tower-broadcast logo-icon"></i>
+          <span>IF Baiano <span class="accent-text">Live</span></span>
+        </div>
+        <p class="tagline">Gerenciador de Overlays</p>
+      </div>
+
+      <div class="sidebar-section-title">Módulo Ativo</div>
+      <div class="module-selector-tabs">
+        <a href="control.html" class="module-tab active events"><i class="fa-solid fa-microphone-lines"></i> Eventos Gerais</a>
+        <a href="control_sports.html" class="module-tab"><i class="fa-solid fa-trophy"></i> IFBaiano Sports</a>
+      </div>
+
+      <div class="sidebar-section-title">Navegação</div>
+      <nav class="sidebar-nav">
+        <a href="#sec-lower-third" class="nav-item active">
+          <i class="fa-solid fa-id-card"></i> Identificador (Lower Third)
+        </a>
+        <a href="#sec-title" class="nav-item">
+          <i class="fa-solid fa-heading"></i> Marcador de Topo
+        </a>
+        <a href="#sec-sponsors" class="nav-item">
+          <i class="fa-solid fa-rectangle-ad"></i> Patrocinadores
+        </a>
+        <a href="#sec-timer" class="nav-item">
+          <i class="fa-solid fa-stopwatch"></i> Temporizador (Timer)
+        </a>
+        <a href="#sec-alert" class="nav-item">
+          <i class="fa-solid fa-circle-exclamation"></i> Quadro de Avisos
+        </a>
+      </nav>
+
+      <div class="obs-instructions-card">
+        <h4><i class="fa-solid fa-tv"></i> Configuração no OBS</h4>
+        <ol>
+          <li>Adicione uma fonte do tipo <strong>Navegador (Browser Source)</strong>.</li>
+          <li>URL: <code class="code-url" id="obs-url">http://localhost:8000/overlay</code></li>
+          <li>Largura: <code>1920</code></li>
+          <li>Altura: <code>1080</code></li>
+          <li>Marque <em>"Atualizar o navegador quando a cena se tornar ativa"</em>.</li>
+        </ol>
+      </div>
+      
+      <div class="sidebar-footer">
+        <p>Desenvolvido para o IF Baiano &copy; 2026</p>
+      </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD AREA -->
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Painel de Controle</h1>
+          <p>Gerenciamento em tempo real de artes para lives</p>
+        </div>
+        <div class="connection-status">
+          <span class="status-dot online"></span>
+          <span id="status-label">Servidor Conectado</span>
+        </div>
+      </header>
+
+      <div class="dashboard-grid">
+        
+        <!-- LOWER THIRD SECTION -->
+        <section id="sec-lower-third" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-id-card"></i> Identificador de Palestrante (Lower Third)</h3>
+            <div class="status-indicator" id="indicator-lower-third">Inativo</div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="lt-name">Nome do Palestrante:</label>
+              <input type="text" id="lt-name" class="form-control" placeholder="Ex: Prof. João Silva">
+            </div>
+            <div class="form-group">
+              <label for="lt-role">Cargo / Instituição:</label>
+              <input type="text" id="lt-role" class="form-control" placeholder="Ex: Diretor Geral - IF Baiano">
+            </div>
+            
+            <div class="form-group">
+              <label>Estilo / Cor Temática:</label>
+              <div class="theme-selector">
+                <button class="theme-btn green active" data-style="green">
+                  <span class="color-preview"></span> Verde IF
+                </button>
+                <button class="theme-btn red" data-style="red">
+                  <span class="color-preview"></span> Vermelho IF
+                </button>
+                <button class="theme-btn dark" data-style="dark">
+                  <span class="color-preview"></span> Chumbo Premium
+                </button>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button class="btn btn-success" onclick="toggleOverlay('lower_third', true)">
+                <i class="fa-solid fa-play"></i> Exibir na Tela
+              </button>
+              <button class="btn btn-danger" onclick="toggleOverlay('lower_third', false)">
+                <i class="fa-solid fa-stop"></i> Ocultar
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOP BAR / TITLE SECTION -->
+        <section id="sec-title" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-heading"></i> Marcador / Título Geral</h3>
+            <div class="status-indicator" id="indicator-title">Inativo</div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="title-main">Título do Evento:</label>
+              <input type="text" id="title-main" class="form-control" placeholder="Ex: III Congresso de Iniciação Científica">
+            </div>
+            <div class="form-group">
+              <label for="title-sub">Subtítulo / Palestra:</label>
+              <input type="text" id="title-sub" class="form-control" placeholder="Ex: IF Baiano - Campus Guanambi">
+            </div>
+
+            <div class="action-buttons">
+              <button class="btn btn-success" onclick="toggleOverlay('title', true)">
+                <i class="fa-solid fa-play"></i> Exibir na Tela
+              </button>
+              <button class="btn btn-danger" onclick="toggleOverlay('title', false)">
+                <i class="fa-solid fa-stop"></i> Ocultar
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- COUNTDOWN TIMER SECTION -->
+        <section id="sec-timer" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-stopwatch"></i> Temporizador (Countdown)</h3>
+            <div class="status-indicator" id="indicator-timer">Inativo</div>
+          </div>
+          <div class="card-body">
+            <div class="timer-config-row">
+              <div class="form-group">
+                <label for="timer-min">Minutos:</label>
+                <input type="number" id="timer-min" class="form-control" min="1" max="99" value="5">
+              </div>
+              <div class="timer-display-box">
+                <span id="current-timer-val">05:00</span>
+              </div>
+            </div>
+
+            <div class="action-buttons timer-actions">
+              <button class="btn btn-primary" id="btn-timer-start" onclick="controlTimer('start')">
+                <i class="fa-solid fa-play"></i> Iniciar
+              </button>
+              <button class="btn btn-secondary" id="btn-timer-pause" onclick="controlTimer('pause')" disabled>
+                <i class="fa-solid fa-pause"></i> Pausar
+              </button>
+              <button class="btn btn-warning" onclick="controlTimer('reset')">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar
+              </button>
+            </div>
+
+            <div class="action-buttons" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+              <button class="btn btn-success" onclick="toggleOverlay('timer', true)">
+                <i class="fa-solid fa-eye"></i> Mostrar no OBS
+              </button>
+              <button class="btn btn-danger" onclick="toggleOverlay('timer', false)">
+                <i class="fa-solid fa-eye-slash"></i> Ocultar no OBS
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- AVISOS / CHAT SECTION -->
+        <section id="sec-alert" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-circle-exclamation"></i> Quadro de Avisos / Alerta</h3>
+            <div class="status-indicator" id="indicator-alert">Inativo</div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="alert-msg">Mensagem ou Pergunta:</label>
+              <textarea id="alert-msg" class="form-control" rows="3" placeholder="Digite um aviso ou pergunta do chat aqui..."></textarea>
+            </div>
+
+            <div class="action-buttons">
+              <button class="btn btn-success" onclick="toggleOverlay('alert', true)">
+                <i class="fa-solid fa-play"></i> Exibir na Tela
+              </button>
+              <button class="btn btn-danger" onclick="toggleOverlay('alert', false)">
+                <i class="fa-solid fa-stop"></i> Ocultar
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SPONSORS / PATROCINADORES SECTION -->
+        <section id="sec-sponsors" class="card control-card full-width-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-rectangle-ad"></i> Gerenciamento de Patrocinadores (Carrossel)</h3>
+            <div class="status-indicator" id="indicator-sponsors">Inativo</div>
+          </div>
+          <div class="card-body">
+            <div class="sponsors-dashboard-grid">
+              
+              <!-- Left side: Upload and config -->
+              <div class="sponsors-config-panel">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-cloud-arrow-up"></i> Upload de Nova Logo:</label>
+                  <div class="upload-zone" id="upload-zone">
+                    <input type="file" id="sponsor-file-input" style="display: none;" accept="image/*">
+                    <i class="fa-solid fa-image-portrait upload-icon"></i>
+                    <p>Arraste a logo aqui ou <span>clique para selecionar</span></p>
+                    <small>Arquivos permitidos: PNG, JPG, WEBP (prefira fundo transparente)</small>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="sponsor-interval">Intervalo de Rotação (segundos):</label>
+                  <input type="number" id="sponsor-interval" class="form-control" value="5" min="2" max="60" onchange="updateSponsorInterval()">
+                </div>
+
+                <div class="action-buttons" style="margin-top: 24px;">
+                  <button class="btn btn-success" onclick="toggleOverlay('sponsors', true)">
+                    <i class="fa-solid fa-play"></i> Iniciar Carrossel
+                  </button>
+                  <button class="btn btn-danger" onclick="toggleOverlay('sponsors', false)">
+                    <i class="fa-solid fa-stop"></i> Parar Carrossel
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right side: Sponsor Logos List -->
+              <div class="sponsors-list-panel">
+                <label><i class="fa-solid fa-list-check"></i> Logos no Servidor (Marque para ativar):</label>
+                <div class="sponsors-grid" id="sponsors-container">
+                  <div class="loading-state">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Carregando logos...
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="static/js/control.js"></script>
+</body>
+</html>

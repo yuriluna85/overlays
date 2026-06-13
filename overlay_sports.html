@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IF Baiano Sports Overlay Output (OBS)</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/overlay_sports.css">
+</head>
+<body>
+  <div class="canvas-container">
+    
+    <!-- SPORTS SCOREBOARD (TOP LEFT) -->
+    <div class="scoreboard-wrapper" id="overlay-scoreboard-box">
+      <div class="scoreboard-overlay">
+        
+        <!-- Top header (IF Baiano Badge & Period) -->
+        <div class="scoreboard-header">
+          <div class="if-mini-logo">
+            <svg viewBox="0 0 100 100" width="16" height="16">
+              <circle cx="14" cy="26" r="11" fill="#E4002B"></circle>
+              <rect x="4" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="4" y="64" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="52" y="16" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="52" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="52" y="64" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="76" y="16" width="20" height="20" rx="3" fill="#009639"></rect>
+              <rect x="76" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+            </svg>
+            <span class="header-comp-tag">IFBaiano Sports</span>
+          </div>
+          <div class="scoreboard-period" id="render-period">1º Tempo</div>
+        </div>
+
+        <!-- Main Score Row -->
+        <div class="scoreboard-main-row">
+          <!-- Team A (Home) -->
+          <div class="team-block team-a">
+            <div class="team-badge" id="badge-color-a"></div>
+            <span class="team-name" id="render-team-a">GUANAMBI</span>
+            <div class="score-box" id="render-score-a">0</div>
+          </div>
+
+          <!-- Timer / Clock divider -->
+          <div class="timer-box">
+            <span id="render-timer-clock">20:00</span>
+          </div>
+
+          <!-- Team B (Away) -->
+          <div class="team-block team-b">
+            <div class="score-box" id="render-score-b">0</div>
+            <span class="team-name" id="render-team-b">CATU</span>
+            <div class="team-badge" id="badge-color-b"></div>
+          </div>
+        </div>
+
+        <!-- Footer Bar (Volley Sets) -->
+        <div class="scoreboard-footer" id="scoreboard-footer-box" style="display: none;">
+          <!-- Volley Sets -->
+          <div class="footer-stats-row" id="stats-volley" style="display: none;">
+            <div class="stat-item">Sets: <span id="render-sets-a">0</span></div>
+            <div class="stat-divider">|</div>
+            <div class="stat-item">Sets: <span id="render-sets-b">0</span></div>
+          </div>
+        </div>
+
+        <!-- Penalties Shootout Row -->
+        <div class="scoreboard-penalties-row" id="overlay-penalties-box" style="display: none;">
+          <div class="overlay-penalty-dots" id="render-penalties-a"></div>
+          <div class="penalty-middle-label">PÊNALTIS</div>
+          <div class="overlay-penalty-dots" id="render-penalties-b"></div>
+        </div>
+
+      </div>
+
+      <!-- SUBTLE ALERT BANNER (SLIDES DOWN FROM SCOREBOARD) -->
+      <div class="scoreboard-alert-banner" id="overlay-sports-alert-box">
+        <span class="alert-ball" id="alert-icon-emoji">⚽</span>
+        <span class="alert-text-content" id="render-sports-alert-title">GOL!</span>
+        <span id="render-sports-alert-desc" style="display: none;"></span> <!-- Hidden but kept to avoid JS errors -->
+      </div>
+    </div>
+
+    <!-- REPLAY BADGE (TOP RIGHT) -->
+    <div class="replay-badge-overlay" id="overlay-replay-badge">
+      <span class="replay-record-dot"></span>
+      <span class="replay-text">REPLAY</span>
+    </div>
+
+  </div>
+
+  <!-- Main Sports Overlay JS -->
+  <script src="static/js/overlay_sports.js"></script>
+</body>
+</html>

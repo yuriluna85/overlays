@@ -1,69 +1,80 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body { background: transparent; overflow: hidden; font-family: 'Lato', sans-serif; }
-        
-        #lower-third {
-            position: absolute;
-            bottom: 50px;
-            left: 50px;
-            display: flex;
-            align-items: center;
-            opacity: 0;
-            transition: all 0.5s ease-in-out;
-            transform: translateX(-100px);
-        }
-
-        #lower-third.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .bar {
-            width: 5px;
-            height: 60px;
-            background: #ff0000; /* Cor padrão */
-        }
-
-        .content {
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 30px;
-        }
-
-        h1 { margin: 0; font-size: 24px; text-transform: uppercase; }
-        p { margin: 0; font-size: 16px; color: #ccc; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IF Baiano Overlay Output (OBS)</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/overlay.css">
 </head>
 <body>
+  <div class="canvas-container">
+    
+    <!-- HEADER BAR / TITLE OVERLAY -->
+    <header class="header-overlay" id="overlay-title-box">
+      <div class="logo-box">
+        <!-- Modernized IF Green and Red emblem -->
+        <svg class="if-svg" viewBox="0 0 100 100" width="36" height="36">
+          <circle cx="14" cy="26" r="11" fill="#E4002B"></circle>
+          <rect x="4" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="4" y="64" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="52" y="16" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="52" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="52" y="64" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="76" y="16" width="20" height="20" rx="3" fill="#009639"></rect>
+          <rect x="76" y="40" width="20" height="20" rx="3" fill="#009639"></rect>
+        </svg>
+        <span class="bar-tag">IF Baiano</span>
+      </div>
+      <div class="title-details">
+        <h2 id="render-title-main">Título do Evento</h2>
+        <p id="render-title-sub">Subtítulo do Evento</p>
+      </div>
+    </header>
 
-    <div id="lower-third">
-        <div class="bar" id="ui-bar"></div>
-        <div class="content">
-            <h1 id="ui-title">Título</h1>
-            <p id="ui-subtitle">Subtítulo</p>
-        </div>
+    <!-- SPONSORS ROTATING CAROUSEL -->
+    <div class="sponsors-overlay" id="overlay-sponsors-box">
+      <div class="sponsors-header">Patrocínio</div>
+      <div class="sponsor-logo-container">
+        <img src="" alt="Patrocinador" id="render-sponsor-img">
+      </div>
     </div>
 
-    <script>
-        function updateOverlay() {
-            const data = JSON.parse(localStorage.getItem('overlayData')) || {};
-            
-            if (data.visible) {
-                document.getElementById('ui-title').innerText = data.title || "";
-                document.getElementById('ui-subtitle').innerText = data.subtitle || "";
-                document.getElementById('ui-bar').style.backgroundColor = data.color || "red";
-                document.getElementById('lower-third').classList.add('active');
-            } else {
-                document.getElementById('lower-third').classList.remove('active');
-            }
-        }
+    <!-- COUNTDOWN TIMER OVERLAY -->
+    <div class="timer-overlay" id="overlay-timer-box">
+      <div class="timer-tag"><i class="fa-solid fa-tower-broadcast"></i> A transmissão iniciará em:</div>
+      <div class="timer-clock" id="render-timer-val">05:00</div>
+    </div>
 
-        // Verifica mudanças a cada 100ms
-        window.addEventListener('storage', updateOverlay);
-        setInterval(updateOverlay, 500); // Backup check
-    </script>
+    <!-- LOWER THIRD (SPEAKER BANNER) -->
+    <div class="lower-third-overlay" id="overlay-lower-third-box">
+      <div class="accent-bar"></div>
+      <div class="lower-third-content">
+        <h3 id="render-lt-name">Nome do Palestrante</h3>
+        <p id="render-lt-role">Cargo / Instituição</p>
+      </div>
+    </div>
+
+    <!-- ALERT / DISCUSSION BOARD -->
+    <div class="alert-overlay" id="overlay-alert-box">
+      <div class="alert-icon-wrapper">
+        <i class="fa-solid fa-comment-dots"></i>
+      </div>
+      <div class="alert-text-wrapper">
+        <h4>Aviso Importante / Pergunta</h4>
+        <p id="render-alert-msg">Mensagem descrita no painel...</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main Overlay JavaScript File -->
+  <script src="static/js/overlay.js"></script>
 </body>
 </html>

@@ -1,0 +1,293 @@
+/* Sports Panel Custom Styles */
+
+.accent-text-sports {
+  color: var(--color-red) !important;
+}
+
+.sports-setup-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Sports selector buttons */
+.sports-type-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.sport-btn {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: var(--transition-fast);
+}
+
+.sport-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.sport-btn.active {
+  background-color: rgba(228, 0, 43, 0.08);
+  border-color: rgba(228, 0, 43, 0.2);
+  color: var(--color-red);
+}
+
+/* Confronto Select Row */
+.confronto-row {
+  display: grid;
+  grid-template-columns: 1fr 50px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.vs-label {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-top: 18px;
+}
+
+/* Scoreboard Grid Control */
+.scoreboard-grid-control {
+  display: grid;
+  grid-template-columns: 1fr 50px 1fr;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px 16px;
+}
+
+.team-score-card h4 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-display {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.score-adjust-buttons {
+  display: flex;
+  gap: 10px;
+  max-width: 140px;
+  margin: 0 auto;
+}
+
+.vs-divider-score {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* Extra controls fouls / sets */
+.extra-controls-box {
+  background-color: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.extra-control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.extra-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.extra-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.extra-adjuster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(0,0,0,0.15);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  justify-content: space-between;
+}
+
+.extra-adjuster span {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.team-initial-lbl {
+  text-transform: uppercase;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+/* Quick alerts and custom alerts */
+.alerts-quick-triggers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.btn-red-sports {
+  background-color: var(--color-red);
+  color: #fff;
+}
+
+.btn-red-sports:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px rgba(228, 0, 43, 0.25);
+}
+
+.btn-green-sports {
+  background-color: var(--color-green);
+  color: #000;
+}
+
+.btn-green-sports:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px rgba(0, 150, 57, 0.25);
+}
+
+.custom-alert-row {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-xs {
+  padding: 6px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+/* Sidebar override for sports */
+.sidebar-nav .nav-item.active {
+  background-color: rgba(228, 0, 43, 0.08);
+  border-color: rgba(228, 0, 43, 0.15);
+}
+
+.back-hub-link {
+  transition: var(--transition-fast);
+}
+
+.back-hub-link:hover {
+  color: var(--color-red) !important;
+}
+
+/* Penalties Shootout Control */
+.penalties-shootout-control {
+  background-color: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.team-penalty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.penalty-team-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  flex: 0 0 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.penalty-dots-list {
+  display: flex;
+  gap: 10px;
+}
+
+.penalty-dot-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.penalty-dot-btn.pending {
+  color: var(--text-muted);
+}
+
+.penalty-dot-btn.success {
+  background-color: var(--color-green);
+  border-color: var(--color-green);
+  color: #000;
+  box-shadow: 0 0 8px rgba(0, 150, 57, 0.3);
+}
+
+.penalty-dot-btn.miss {
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(228, 0, 43, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .sponsors-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

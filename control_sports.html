@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Controle de Esportes (JEIF/JAIF) — IF Baiano</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS (shares most styles with control.css, but customized for sports) -->
+  <link rel="stylesheet" href="static/css/control.css">
+  <link rel="stylesheet" href="static/css/control_sports.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-trophy logo-icon"></i>
+          <span>IFBaiano <span class="accent-text-sports">Sports</span></span>
+        </div>
+        <p class="tagline">Overlays de Esportes</p>
+      </div>
+
+      <div class="sidebar-section-title">Módulo Ativo</div>
+      <div class="module-selector-tabs">
+        <a href="control.html" class="module-tab"><i class="fa-solid fa-microphone-lines"></i> Eventos Gerais</a>
+        <a href="control_sports.html" class="module-tab active sports"><i class="fa-solid fa-trophy"></i> IFBaiano Sports</a>
+      </div>
+
+      <div class="sidebar-section-title">Navegação</div>
+      <nav class="sidebar-nav">
+        <a href="#sec-sport-selector" class="nav-item active">
+          <i class="fa-solid fa-circle-play"></i> Modalidade & Times
+        </a>
+        <a href="#sec-scoreboard" class="nav-item">
+          <i class="fa-solid fa-calculator"></i> Placar & Pontos
+        </a>
+        <a href="#sec-timer" class="nav-item">
+          <i class="fa-solid fa-stopwatch"></i> Tempo & Período
+        </a>
+        <a href="#sec-penalties" class="nav-item">
+          <i class="fa-solid fa-circle-dot"></i> Disputa de Pênaltis
+        </a>
+        <a href="#sec-alert" class="nav-item">
+          <i class="fa-solid fa-bell"></i> Avisos / Alertas
+        </a>
+        <a href="index.html" class="nav-item back-hub-link" style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <i class="fa-solid fa-house"></i> Voltar ao Hub Principal
+        </a>
+      </nav>
+
+      <div class="obs-instructions-card">
+        <h4><i class="fa-solid fa-tv"></i> Configuração no OBS</h4>
+        <ol>
+          <li>Adicione uma fonte do tipo <strong>Navegador (Browser Source)</strong>.</li>
+          <li>URL: <code class="code-url" id="obs-url">http://localhost:8000/sports/overlay</code></li>
+          <li>Largura: <code>1920</code></li>
+          <li>Altura: <code>1080</code></li>
+          <li>Marque <em>"Atualizar o navegador quando a cena se tornar ativa"</em>.</li>
+        </ol>
+      </div>
+      
+      <div class="sidebar-footer">
+        <p>Desenvolvido para o IF Baiano &copy; 2026</p>
+      </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD AREA -->
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Painel de Controle Esportivo</h1>
+          <p>Gerenciamento de placar e cronômetro dos Jogos Institucionais</p>
+        </div>
+        <div class="connection-status">
+          <span class="status-dot online"></span>
+          <span id="status-label">Servidor Conectado</span>
+        </div>
+      </header>
+
+      <div class="dashboard-grid">
+        
+        <!-- SPORT SELECTOR & TEAMS -->
+        <section id="sec-sport-selector" class="card control-card full-width-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-circle-play"></i> Modalidade & Configuração do Confronto</h3>
+            <div class="status-indicator" id="indicator-sports-overlay">Inativo no OBS</div>
+          </div>
+          <div class="card-body">
+            <div class="sports-setup-container">
+              
+              <!-- Sport Select -->
+              <div class="form-group">
+                <label>Selecione a Modalidade Esportiva:</label>
+                <div class="sports-type-selector">
+                  <button class="sport-btn active" data-sport="futsal" onclick="changeSport('futsal')">
+                    <i class="fa-solid fa-shoe-prints"></i> Futsal
+                  </button>
+                  <button class="sport-btn" data-sport="volley" onclick="changeSport('volley')">
+                    <i class="fa-solid fa-volleyball"></i> Vôlei
+                  </button>
+                  <button class="sport-btn" data-sport="basketball" onclick="changeSport('basketball')">
+                    <i class="fa-solid fa-basketball"></i> Basquete
+                  </button>
+                  <button class="sport-btn" data-sport="handball" onclick="changeSport('handball')">
+                    <i class="fa-solid fa-hand-fist"></i> Handebol
+                  </button>
+                </div>
+              </div>
+
+              <!-- Confronto Select -->
+              <div class="confronto-row">
+                <div class="form-group">
+                  <label for="select-team-a">Time da Casa (Mandante - Campus):</label>
+                  <select id="select-team-a" class="form-control" onchange="updateTeamsState()">
+                    <!-- Campuses loaded via script -->
+                  </select>
+                  <div style="margin-top: 8px;">
+                    <label for="select-color-a" style="font-size: 11px; color: var(--text-muted);">Cor do Uniforme:</label>
+                    <select id="select-color-a" class="form-control" style="padding: 6px 10px; font-size: 12px; height: 32px;" onchange="updateTeamsState()">
+                      <option value="green">Verde IF</option>
+                      <option value="red">Vermelho IF</option>
+                      <option value="blue">Azul</option>
+                      <option value="yellow">Amarelo</option>
+                      <option value="white">Branco</option>
+                      <option value="dark">Preto/Chumbo</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="vs-label" style="align-self: flex-start; margin-top: 12px;">VS</div>
+                <div class="form-group">
+                  <label for="select-team-b">Time de Fora (Visitante - Campus):</label>
+                  <select id="select-team-b" class="form-control" onchange="updateTeamsState()">
+                    <!-- Campuses loaded via script -->
+                  </select>
+                  <div style="margin-top: 8px;">
+                    <label for="select-color-b" style="font-size: 11px; color: var(--text-muted);">Cor do Uniforme:</label>
+                    <select id="select-color-b" class="form-control" style="padding: 6px 10px; font-size: 12px; height: 32px;" onchange="updateTeamsState()">
+                      <option value="green">Verde IF</option>
+                      <option value="red" selected>Vermelho IF</option>
+                      <option value="blue">Azul</option>
+                      <option value="yellow">Amarelo</option>
+                      <option value="white">Branco</option>
+                      <option value="dark">Preto/Chumbo</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- SCOREBOARD CONTROLS -->
+        <section id="sec-scoreboard" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-calculator"></i> Placar & Pontuações</h3>
+            <span class="active-sport-badge" id="active-sport-label">Futsal</span>
+          </div>
+          <div class="card-body">
+            
+            <div class="scoreboard-grid-control">
+              <!-- Team A -->
+              <div class="team-score-card">
+                <h4 id="label-team-a">Guanambi</h4>
+                <div class="score-display">
+                  <span id="score-val-a">0</span>
+                </div>
+                <div class="score-adjust-buttons">
+                  <button class="btn btn-secondary btn-sm" onclick="adjustScore('a', -1)"><i class="fa-solid fa-minus"></i></button>
+                  <button class="btn btn-primary btn-sm" onclick="adjustScore('a', 1)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+              </div>
+
+              <div class="vs-divider-score">:</div>
+
+              <!-- Team B -->
+              <div class="team-score-card">
+                <h4 id="label-team-b">Catu</h4>
+                <div class="score-display">
+                  <span id="score-val-b">0</span>
+                </div>
+                <div class="score-adjust-buttons">
+                  <button class="btn btn-secondary btn-sm" onclick="adjustScore('b', -1)"><i class="fa-solid fa-minus"></i></button>
+                  <button class="btn btn-primary btn-sm" onclick="adjustScore('b', 1)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="extra-controls-box" id="extra-volleyball" style="display: none;">
+              <!-- Volleyball Sets -->
+              <div class="extra-control-row">
+                <div class="extra-item">
+                  <label>Sets Ganhos (A):</label>
+                  <div class="extra-adjuster">
+                    <span id="sets-val-a">0</span>
+                    <button class="btn btn-secondary btn-xs" onclick="adjustSets('a', -1)"><i class="fa-solid fa-minus"></i></button>
+                    <button class="btn btn-secondary btn-xs" onclick="adjustSets('a', 1)"><i class="fa-solid fa-plus"></i></button>
+                  </div>
+                </div>
+                <div class="extra-item">
+                  <label>Sets Ganhos (B):</label>
+                  <div class="extra-adjuster">
+                    <span id="sets-val-b">0</span>
+                    <button class="btn btn-secondary btn-xs" onclick="adjustSets('b', -1)"><i class="fa-solid fa-minus"></i></button>
+                    <button class="btn btn-secondary btn-xs" onclick="adjustSets('b', 1)"><i class="fa-solid fa-plus"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- OBS Show Hide buttons -->
+            <div class="action-buttons" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+              <button class="btn btn-success" onclick="toggleSportsOverlay(true)">
+                <i class="fa-solid fa-eye"></i> Mostrar Placar no OBS
+              </button>
+              <button class="btn btn-danger" onclick="toggleSportsOverlay(false)">
+                <i class="fa-solid fa-eye-slash"></i> Ocultar Placar
+              </button>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 10px;">
+              <button class="btn btn-primary" id="btn-toggle-replay" onclick="toggleReplayMode()" style="background-color: rgba(228, 0, 43, 0.08); border-color: rgba(228, 0, 43, 0.2); color: var(--color-red); width: 100%;">
+                <i class="fa-solid fa-video"></i> REPLAY: DESATIVADO
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- TIMER & PERIOD SECTION -->
+        <section id="sec-timer" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-stopwatch"></i> Tempo de Jogo & Período</h3>
+          </div>
+          <div class="card-body">
+            
+            <div class="timer-config-row">
+              <div class="form-group">
+                <label for="sports-timer-min">Minutos de Jogo:</label>
+                <input type="number" id="sports-timer-min" class="form-control" min="1" max="99" value="20" onchange="adjustTimerDuration()">
+              </div>
+              <div class="timer-display-box">
+                <span id="sports-current-timer-val">20:00</span>
+              </div>
+            </div>
+
+            <div class="timer-direction-row" style="margin-top: 8px;">
+              <label style="font-size: 12.5px; font-weight:600; color: var(--text-muted); display: block; margin-bottom: 6px;">Direção do Cronômetro:</label>
+              <div class="theme-selector">
+                <button class="theme-btn green active" id="btn-dir-down" onclick="setTimerDirection('down')">
+                  <i class="fa-solid fa-circle-arrow-down"></i> Regressivo (Down)
+                </button>
+                <button class="theme-btn red" id="btn-dir-up" onclick="setTimerDirection('up')">
+                  <i class="fa-solid fa-circle-arrow-up"></i> Progressivo (Up)
+                </button>
+              </div>
+            </div>
+
+            <div class="action-buttons timer-actions" style="margin-top: 16px;">
+              <button class="btn btn-primary" id="btn-sports-timer-start" onclick="controlSportsTimer('start')">
+                <i class="fa-solid fa-play"></i> Iniciar
+              </button>
+              <button class="btn btn-secondary" id="btn-sports-timer-pause" onclick="controlSportsTimer('pause')" disabled>
+                <i class="fa-solid fa-pause"></i> Pausar
+              </button>
+              <button class="btn btn-warning" onclick="controlSportsTimer('reset')">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar
+              </button>
+            </div>
+
+            <!-- Period Config -->
+            <div class="form-group" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+              <label for="select-period">Período / Tempo Ativo:</label>
+              <div class="period-selector-row">
+                <select id="select-period" class="form-control" onchange="updatePeriod()">
+                  <option value="1º Tempo">1º Tempo</option>
+                  <option value="Intervalo">Intervalo</option>
+                  <option value="2º Tempo">2º Tempo</option>
+                  <option value="1º Set">1º Set</option>
+                  <option value="2º Set">2º Set</option>
+                  <option value="3º Set">3º Set</option>
+                  <option value="4º Set">4º Set</option>
+                  <option value="5º Set">5º Set</option>
+                  <option value="Prorrogação">Prorrogação</option>
+                  <option value="Pênaltis">Pênaltis</option>
+                  <option value="Fim de Jogo">Fim de Jogo</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- DISPUTA DE PÊNALTIS -->
+        <section id="sec-penalties" class="card control-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-circle-dot"></i> Disputa de Pênaltis</h3>
+            <div class="status-indicator" id="indicator-penalties">Inativo no OBS</div>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+              Controle das cobranças de pênaltis/tiros livres. Clique sobre cada círculo para alternar o status: 
+              <span style="color: #10b981; font-weight: bold;">Verde (Gol)</span>, 
+              <span style="color: #ef4444; font-weight: bold;">Vermelho (Não Gol)</span> ou 
+              <span style="color: var(--text-muted); font-weight: bold;">Cinza (Pendente)</span>.
+            </p>
+
+            <div class="penalties-shootout-control">
+              <!-- Team A Penalties -->
+              <div class="team-penalty-row">
+                <span class="penalty-team-name" id="penalty-name-a">Time Casa</span>
+                <div class="penalty-dots-list" id="penalty-dots-a">
+                  <!-- Gerado via JS -->
+                </div>
+              </div>
+
+              <!-- Team B Penalties -->
+              <div class="team-penalty-row" style="margin-top: 16px;">
+                <span class="penalty-team-name" id="penalty-name-b">Time Fora</span>
+                <div class="penalty-dots-list" id="penalty-dots-b">
+                  <!-- Gerado via JS -->
+                </div>
+              </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 20px;">
+              <button class="btn btn-primary btn-sm" onclick="adjustPenaltyKicksCount(1)">
+                <i class="fa-solid fa-plus"></i> +1 Cobrança
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="adjustPenaltyKicksCount(-1)">
+                <i class="fa-solid fa-minus"></i> -1 Cobrança
+              </button>
+              <button class="btn btn-warning btn-sm" onclick="resetPenaltiesState()">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar Pênaltis
+              </button>
+            </div>
+
+            <div class="action-buttons" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 16px;">
+              <button class="btn btn-success" onclick="togglePenaltiesOverlay(true)">
+                <i class="fa-solid fa-eye"></i> Exibir Pênaltis no OBS
+              </button>
+              <button class="btn btn-danger" onclick="togglePenaltiesOverlay(false)">
+                <i class="fa-solid fa-eye-slash"></i> Ocultar Pênaltis
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ALERTS / GOAL TRIGGERS -->
+        <section id="sec-alert" class="card control-card full-width-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bell"></i> Avisos da Transmissão / Efeitos Especiais</h3>
+          </div>
+          <div class="card-body">
+            <label style="font-size: 12.5px; font-weight:600; color: var(--text-muted); display: block; margin-bottom: 8px;">Gatilhos Rápidos de Transmissão (Alerta temporário na tela):</label>
+            <div class="alerts-quick-triggers">
+              <button class="btn btn-red-sports" onclick="triggerQuickAlert('GOOOOL!')">
+                <i class="fa-solid fa-futbol"></i> GOL!
+              </button>
+              <button class="btn btn-green-sports" onclick="triggerQuickAlert('PONTO!')">
+                <i class="fa-solid fa-circle-check"></i> Ponto!
+              </button>
+              <button class="btn btn-secondary" onclick="triggerQuickAlert('TEMPO TÉCNICO!')">
+                <i class="fa-solid fa-clock-rotate-left"></i> Tempo Técnico!
+              </button>
+              <button class="btn btn-secondary" onclick="triggerQuickAlert('PÊNALTI!')">
+                <i class="fa-solid fa-triangle-exclamation"></i> Pênalti!
+              </button>
+              <button class="btn btn-warning" onclick="triggerQuickAlert('FIM DE JOGO!')">
+                <i class="fa-solid fa-flag-checkered"></i> Fim de Jogo!
+              </button>
+            </div>
+
+            <div class="form-group" style="margin-top: 16px;">
+              <label for="custom-sports-alert">Alerta Customizado (Digite e envie para a tela):</label>
+              <div class="custom-alert-row">
+                <input type="text" id="custom-sports-alert" class="form-control" placeholder="Ex: Substituição no Guanambi ou Cartão Amarelo Catu">
+                <button class="btn btn-success" style="flex: 0 0 160px;" onclick="sendCustomSportsAlert()">
+                  <i class="fa-solid fa-paper-plane"></i> Enviar Alerta
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Custom Scripts -->
+  <script src="static/js/control_sports.js"></script>
+</body>
+</html>
